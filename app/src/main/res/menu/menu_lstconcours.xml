@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group_concours"
+        android:visible="true">
+        <item
+            android:id="@+id/lstconcours"
+            android:title="@string/LstConcours" />
+    </group>
+    <item
+        android:id="@+id/lst_chevaux"
+        android:title="@string/param_recup" />
+</menu>

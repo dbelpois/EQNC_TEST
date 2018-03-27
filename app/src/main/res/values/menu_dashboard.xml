@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="MenuDashBoard">
+        <MenuDashboard>
+            <ID>Connexion></ID>
+            <Ordre>1</Ordre>
+            <Name>Connexion</Name>
+            <ImgURI>http://www.equimetric.fr/applis/ressources/images/</ImgURI>
+            <Description>Identifiez-vous à l'application pour récupérer vos préférences</Description>
+        </MenuDashboard>
+        <MenuDashboard>
+            <ID>Parametres></ID>
+            <Ordre>2</Ordre>
+            <Name>Paramètres</Name>
+            <ImgURI>http://www.equimetric.fr/applis/ressources/images/</ImgURI>
+            <Description>Accédez aux paramètres de votre profil</Description>
+        </MenuDashboard>
+        <MenuDashboard>
+            <ID>Quitter</ID>
+            <Ordre>3</Ordre>
+            <Name>Quitter</Name>
+            <ImgURI>http://www.equimetric.fr/applis/ressources/images/</ImgURI>
+            <Description>Quittez l'application</Description>
+        </MenuDashboard>
+    </string>
+</resources>
