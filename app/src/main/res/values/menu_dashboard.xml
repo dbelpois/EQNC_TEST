@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="MenuDashBoard">
+    <string name="MenuDashboardList">
         <MenuDashboard>
             <ID>Connexion></ID>
             <Ordre>1</Ordre>

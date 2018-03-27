@@ -54,7 +54,7 @@ class SharedPreferencesHelper(private val sharedPreferences: SharedPreferences) 
             putLong(KEY_DOB, sharedPreferenceEntry.dateNaissance.timeInMillis)
             putString(KEY_EMAIL, sharedPreferenceEntry.emaillogin)
             putString(KEY_PASSWD, sharedPreferenceEntry.passlogin)
-            putBoolean(KEY_PASSWD, sharedPreferenceEntry.autologin)
+            putBoolean(KEY_AUTOLOGIN, sharedPreferenceEntry.autologin)
         }
 
         // Commit changes to SharedPreferences.
@@ -152,11 +152,13 @@ class ListConcours {
 
 
 class MenuDashboard{
+    var ordre: Int
     var Nom: String
     var imgMenu: Uri
     var description: String
 
-    constructor(mNom: String, mImgMenu: Uri, mDescript: String) {
+    constructor(mOrdre: Int, mNom: String, mImgMenu: Uri, mDescript: String) {
+      this.ordre= mOrdre
       this.Nom= mNom
       this.imgMenu = mImgMenu
       this.description = mDescript
@@ -166,8 +168,8 @@ class MenuDashboard{
 class LstMenuDashboard {
     lateinit var ListMenus: ArrayList<MenuDashboard>
 
-    fun add(mNom: String, mImgMenu: Uri, mDescription: String) {
-        this.ListMenus.add(MenuDashboard(mNom, mImgMenu, mDescription))
+    fun add(mOrdre: Int, mNom: String, mImgMenu: Uri, mDescription: String) {
+        this.ListMenus.add(MenuDashboard(mOrdre, mNom, mImgMenu, mDescription))
     }
 
     fun add(mMenuDashboard: MenuDashboard) {
