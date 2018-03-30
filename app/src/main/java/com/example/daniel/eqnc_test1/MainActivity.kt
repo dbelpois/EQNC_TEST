@@ -1,5 +1,6 @@
 package com.example.daniel.eqnc_test1
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -10,17 +11,19 @@ import org.w3c.dom.Document
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 import android.Manifest.permission.INTERNET
+import android.app.Activity
+import android.content.Context
 import android.os.Build
 import android.content.pm.PackageManager
 import android.os.AsyncTask
-import android.support.design.widget.Snackbar
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import kotlinx.android.synthetic.main.activity_ecrlogin.*
-import kotlinx.android.synthetic.main.concour_list.*
+import android.support.v4.app.ActivityCompat.requestPermissions
+import android.support.v4.app.ActivityCompat.shouldShowRequestPermissionRationale
+import android.support.v4.content.ContextCompat
 import org.w3c.dom.Element
 import org.w3c.dom.Node
-import org.xmlpull.v1.XmlPullParser
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 /**
  * Created by Daniel on 10/03/2018.
@@ -35,7 +38,7 @@ class MainActivity :  AppCompatActivity(){
         setContentView(R.layout.activity_main)
 
         loadApplication()
-        chargementDashboard()
+        chargementDashboard(this).execute()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -77,41 +80,54 @@ class MainActivity :  AppCompatActivity(){
         }
         startActivityForResult(Intent(gotoLogin),0)
     }
-    /*******************************************
-     *  Chargement du dashboard
-     *
-     *  TODO: Charger les icones sur internet ?
-     */
-    private fun chargementDashboard() {
-        var DashBoardMenu :LstMenuDashboard
-        val l_xmlBuilder : DocumentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-        mayRequestInternet()
-        //var xmlMenu: Document = l_xmlBuilder.parse("https://www.equinumeric.fr/Applis/menu_dashboard.xml")
-        var xmlMenuDB: Document = l_xmlBuilder.newDocument() //l_xmlBuilder.parse ("https://www.equinumeric.fr/Applis/menu_dashboard.xml")
 
-        xmlMenuDB.documentURI = "https://www.equinumeric.fr/Applis/menu_dashboard.xml"
-        xmlMenuDB.normalizeDocument()
-
-        for ( i in 0 until xmlMenuDB.getElementsByTagName("MenuDashBoards").length -1) {
-            var MenuNode: Node = xmlMenuDB.getElementsByTagName("MenuDashBoards").item(i)
-            val elem = MenuNode as Element
-            println("ID: ${elem.getElementsByTagName("ID").item(0).textContent}")
-        }
+}
 
 
+/*******************************************
+ *  Chargement du dashboard
+ *
+ *  TODO: Charger les icones sur internet ?
+ */
+class chargementDashboard(val context: Activity): AsyncTask<Unit, Unit, String>() {
+    //lateinit var xmlMenu: Document
+    val l_xmlBuilder: DocumentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+    var xmlMenuDB: Document = l_xmlBuilder.newDocument() //l_xmlBuilder.parse ("https://www.equinumeric.fr/Applis/menu_dashboard.xml")
 
+    override fun doInBackground(vararg p0: Unit?): String? {
+
+        mayRequestInternet(context)
+        xmlMenuDB = l_xmlBuilder.parse("https://www.equinumeric.fr/Applis/menu_dashboard.xml")
+        return null
     }
-    private fun mayRequestInternet(): Boolean {
+
+    override fun onPostExecute(result: String?) {
+        super.onPostExecute(result)
+        xmlMenuDB.normalizeDocument()
+        var DashBoardMenu: LstMenuDashboard
+
+        if (xmlMenuDB.getElementsByTagName("MenuDashBoards").length > 0) {
+            val menuNode: Node = xmlMenuDB.getElementsByTagName("MenuDashBoards").item(0)
+
+            for (i in 0.. menuNode.childNodes.length-1) {
+                val elem = menuNode.childNodes.item(i)
+                println("ID: ${elem.attributes.getNamedItem("ID").textContent}")
+            }
+        }
+    }
+    fun mayRequestInternet(context: Activity): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true
         }
-        if (checkSelfPermission(INTERNET) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(context, arrayOf(INTERNET), 0)
+
             return true
         }
-        if (shouldShowRequestPermissionRationale(INTERNET)) {
+        if (shouldShowRequestPermissionRationale(context, INTERNET)) {
             //TODO
         } else {
-            requestPermissions(arrayOf(INTERNET), 0)
+            requestPermissions(context, arrayOf(INTERNET), 0)
         }
         return false
     }
