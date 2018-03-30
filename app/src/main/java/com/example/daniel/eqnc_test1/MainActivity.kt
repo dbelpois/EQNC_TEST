@@ -12,18 +12,14 @@ import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 import android.Manifest.permission.INTERNET
 import android.app.Activity
-import android.content.Context
 import android.os.Build
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.AsyncTask
 import android.support.v4.app.ActivityCompat.requestPermissions
 import android.support.v4.app.ActivityCompat.shouldShowRequestPermissionRationale
 import android.support.v4.content.ContextCompat
-import org.w3c.dom.Element
 import org.w3c.dom.Node
-import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 /**
  * Created by Daniel on 10/03/2018.
@@ -103,18 +99,46 @@ class chargementDashboard(val context: Activity): AsyncTask<Unit, Unit, String>(
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-        xmlMenuDB.normalizeDocument()
-        var DashBoardMenu: LstMenuDashboard
+        xmlMenuDB.documentElement.normalize()
+        var DashBoardMenu: LstMenuDashboard = LstMenuDashboard()
 
-        if (xmlMenuDB.getElementsByTagName("MenuDashBoards").length > 0) {
-            val menuNode: Node = xmlMenuDB.getElementsByTagName("MenuDashBoards").item(0)
+        var id: String =""
+        var ordre: Int = 0
+        var Nom: String =""
+        var imgMenu: String =""
+        var description: String =""
 
-            for (i in 0.. menuNode.childNodes.length-1) {
-                val elem = menuNode.childNodes.item(i)
+
+
+        println("${xmlMenuDB.documentElement.nodeName}")
+
+        if (xmlMenuDB.documentElement.hasChildNodes()) {
+            var menuDashboard = xmlMenuDB.getElementsByTagName("MenuDashboard")
+
+            for (i in 0..menuDashboard.length-1) {
+                var elem = menuDashboard.item(i)
+                if (elem.hasChildNodes()) {
+                    for (j in 0.. elem.childNodes.length-1) {
+                       if (elem.childNodes.item(j).nodeType == Node.ELEMENT_NODE) {
+                           when (elem.childNodes.item(j).nodeName) {
+                               "ID" -> id=elem.childNodes.item(j).textContent
+                               "Ordre" -> ordre=elem.childNodes.item(j).textContent.toInt()
+                               "Name" -> Nom=elem.childNodes.item(j).textContent
+                               "ImgURI" -> imgMenu = elem.childNodes.item(j).textContent
+                               "Description" -> description=elem.childNodes.item(j).textContent
+                           }
+                       }
+                    }
+                DashBoardMenu.add(id, ordre,Nom,imgMenu,description)
+
+                }
+
                 println("ID: ${elem.attributes.getNamedItem("ID").textContent}")
             }
         }
     }
+
+
     fun mayRequestInternet(context: Activity): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true

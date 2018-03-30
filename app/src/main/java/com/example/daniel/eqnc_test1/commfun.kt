@@ -181,7 +181,7 @@ class LstMenuDashboard {
     lateinit var ListMenus: ArrayList<MenuDashboard>
 
     fun add(mId: String, mOrdre: Int, mNom: String, mImgMenu: String, mDescription: String) {
-        if (ListMenus==null) 
+        if (ListMenus==null)
         this.ListMenus.add(MenuDashboard(mId, mOrdre, mNom, mImgMenu, mDescription))
     }
 
