@@ -9,6 +9,7 @@ import java.util.regex.Pattern
 import android.content.SharedPreferences
 import android.net.Uri
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Class qui contient les préférenes sauvegardées.
@@ -121,14 +122,16 @@ class EmailValidator : TextWatcher {
  * Class qui défini les données d'un concours
  */
 class Concours {
+    var id: String
     var Nom: String
     var Lieu: String
     var Organisateur: String
     var date: Date
     var refConcour: String
-    var imgTypeConcours: Uri
+    var imgTypeConcours: String
 
-    constructor(Nom: String, Lieu: String, Organisateur: String, date: Date, refConcour: String, imgTypeConcours: Uri) {
+    constructor(mid: String, Nom: String, Lieu: String, Organisateur: String, date: Date, refConcour: String, imgTypeConcours: String) {
+        id=mid
         this.Nom = Nom
         this.Lieu = Lieu
         this.Organisateur = Organisateur
@@ -139,37 +142,47 @@ class Concours {
 }
 
 class ListConcours {
-    lateinit var lstConcours: ArrayList<Concours>
+    var lstConcours: ArrayList<Concours>? = null
 
     fun add(concours: Concours) {
-        lstConcours.add(concours)
+        if (lstConcours == null) {
+            lstConcours = arrayListOf(concours)
+        }
+        else
+            lstConcours.add(concours)
     }
 
-    fun add(Nom: String, Lieu: String, Organisateur: String, date: Date, refConcour: String, imgTypeConcours: Uri){
-        lstConcours.add(Concours(Nom, Lieu, Organisateur, date, refConcour, imgTypeConcours))
+    fun add(mId: String, Nom: String, Lieu: String, Organisateur: String, date: Date, refConcour: String, imgTypeConcours: String){
+        if (lstConcours == null) {
+            lstConcours = arrayListOf(Concours(mId, Nom, Lieu, Organisateur, date, refConcour, imgTypeConcours))
+        }
+        lstConcours.add(Concours(mId, Nom, Lieu, Organisateur, date, refConcour, imgTypeConcours))
     }
 }
 
 
 class MenuDashboard{
+    var id: String
     var ordre: Int
     var Nom: String
-    var imgMenu: Uri
+    var imgMenu: String
     var description: String
 
-    constructor(mOrdre: Int, mNom: String, mImgMenu: Uri, mDescript: String) {
-      this.ordre= mOrdre
-      this.Nom= mNom
-      this.imgMenu = mImgMenu
-      this.description = mDescript
+    constructor(mId : String, mOrdre: Int, mNom: String, mImgMenu: String, mDescript: String) {
+        this.id = mId
+        this.ordre= mOrdre
+        this.Nom= mNom
+        this.imgMenu = mImgMenu
+        this.description = mDescript
     }
 }
 
 class LstMenuDashboard {
     lateinit var ListMenus: ArrayList<MenuDashboard>
 
-    fun add(mOrdre: Int, mNom: String, mImgMenu: Uri, mDescription: String) {
-        this.ListMenus.add(MenuDashboard(mOrdre, mNom, mImgMenu, mDescription))
+    fun add(mId: String, mOrdre: Int, mNom: String, mImgMenu: String, mDescription: String) {
+        if (ListMenus==null) 
+        this.ListMenus.add(MenuDashboard(mId, mOrdre, mNom, mImgMenu, mDescription))
     }
 
     fun add(mMenuDashboard: MenuDashboard) {
