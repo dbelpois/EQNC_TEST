@@ -149,14 +149,14 @@ class ListConcours {
             lstConcours = arrayListOf(concours)
         }
         else
-            lstConcours.add(concours)
+            lstConcours?.add(concours)
     }
 
     fun add(mId: String, Nom: String, Lieu: String, Organisateur: String, date: Date, refConcour: String, imgTypeConcours: String){
         if (lstConcours == null) {
             lstConcours = arrayListOf(Concours(mId, Nom, Lieu, Organisateur, date, refConcour, imgTypeConcours))
         }
-        lstConcours.add(Concours(mId, Nom, Lieu, Organisateur, date, refConcour, imgTypeConcours))
+        lstConcours?.add(Concours(mId, Nom, Lieu, Organisateur, date, refConcour, imgTypeConcours))
     }
 }
 
@@ -178,15 +178,20 @@ class MenuDashboard{
 }
 
 class LstMenuDashboard {
-    lateinit var ListMenus: ArrayList<MenuDashboard>
+    var ListMenus: ArrayList<MenuDashboard>? = null
 
     fun add(mId: String, mOrdre: Int, mNom: String, mImgMenu: String, mDescription: String) {
         if (ListMenus==null)
-        this.ListMenus.add(MenuDashboard(mId, mOrdre, mNom, mImgMenu, mDescription))
+            ListMenus = arrayListOf(MenuDashboard(mId, mOrdre, mNom, mImgMenu, mDescription))
+        else
+            ListMenus?.add(MenuDashboard(mId, mOrdre, mNom, mImgMenu, mDescription))
     }
 
     fun add(mMenuDashboard: MenuDashboard) {
-        this.ListMenus.add(mMenuDashboard)
+        if (ListMenus==null)
+            arrayListOf(mMenuDashboard)
+        else
+            this.ListMenus?.add(mMenuDashboard)
     }
 
 }

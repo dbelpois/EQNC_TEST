@@ -14,7 +14,6 @@ import android.Manifest.permission.INTERNET
 import android.app.Activity
 import android.os.Build
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.AsyncTask
 import android.support.v4.app.ActivityCompat.requestPermissions
 import android.support.v4.app.ActivityCompat.shouldShowRequestPermissionRationale
@@ -102,40 +101,44 @@ class chargementDashboard(val context: Activity): AsyncTask<Unit, Unit, String>(
         xmlMenuDB.documentElement.normalize()
         var DashBoardMenu: LstMenuDashboard = LstMenuDashboard()
 
-        var id: String =""
+        var id: String = ""
         var ordre: Int = 0
-        var Nom: String =""
-        var imgMenu: String =""
-        var description: String =""
-
-
+        var Nom: String = ""
+        var imgMenu: String = ""
+        var description: String = ""
 
         println("${xmlMenuDB.documentElement.nodeName}")
 
         if (xmlMenuDB.documentElement.hasChildNodes()) {
             var menuDashboard = xmlMenuDB.getElementsByTagName("MenuDashboard")
 
-            for (i in 0..menuDashboard.length-1) {
-                var elem = menuDashboard.item(i)
+            for (i in 0..menuDashboard.length - 1) {
+                val elem = menuDashboard.item(i)
                 if (elem.hasChildNodes()) {
-                    for (j in 0.. elem.childNodes.length-1) {
-                       if (elem.childNodes.item(j).nodeType == Node.ELEMENT_NODE) {
-                           when (elem.childNodes.item(j).nodeName) {
-                               "ID" -> id=elem.childNodes.item(j).textContent
-                               "Ordre" -> ordre=elem.childNodes.item(j).textContent.toInt()
-                               "Name" -> Nom=elem.childNodes.item(j).textContent
-                               "ImgURI" -> imgMenu = elem.childNodes.item(j).textContent
-                               "Description" -> description=elem.childNodes.item(j).textContent
-                           }
-                       }
+                    for (j in 0..elem.childNodes.length - 1) {
+                        if (elem.childNodes.item(j).nodeType == Node.ELEMENT_NODE) {
+                            when (elem.childNodes.item(j).nodeName) {
+                                "ID" -> id = elem.childNodes.item(j).textContent
+                                "Ordre" -> ordre = elem.childNodes.item(j).textContent.toInt()
+                                "Name" -> Nom = elem.childNodes.item(j).textContent
+                                "ImgURI" -> imgMenu = elem.childNodes.item(j).textContent
+                                "Description" -> description = elem.childNodes.item(j).textContent
+                            }
+                        }
                     }
-                DashBoardMenu.add(id, ordre,Nom,imgMenu,description)
-
+                    DashBoardMenu.add(id, ordre, Nom, imgMenu, description)
                 }
-
-                println("ID: ${elem.attributes.getNamedItem("ID").textContent}")
             }
         }
+        //Affichage
+        DashBoardMenu.ListMenus?.sortBy { it.ordre }
+        var nbItem =  DashBoardMenu.ListMenus?.count()
+        var i=0
+        while (nbItem!=null && i < nbItem) {
+
+        }
+
+
     }
 
 
