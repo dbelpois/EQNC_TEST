@@ -17,10 +17,7 @@ import kotlinx.android.synthetic.main.fragment_dashboard.view.*
  * specified [OnListFragmentInteractionListener].
  * TODO: Replace the implementation with code for your data type.
  */
-class MyDashBoardRecyclerViewAdapter(
-        private val mValues: List<DummyItem>,
-        private val mListener: OnListFragmentInteractionListener?)
-    : RecyclerView.Adapter<MyDashBoardRecyclerViewAdapter.ViewHolder>() {
+class MyDashBoardRecyclerViewAdapter(private val mValues: List<DummyItem>, private val mListener: OnListFragmentInteractionListener?): RecyclerView.Adapter<MyDashBoardRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
 
@@ -53,7 +50,7 @@ class MyDashBoardRecyclerViewAdapter(
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.item_number
+        val mIdView: TextView = mView.ordre
         val mContentView: TextView = mView.content
 
         override fun toString(): String {

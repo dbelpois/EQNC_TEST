@@ -10,14 +10,8 @@ import android.view.MenuItem
 import org.w3c.dom.Document
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
-import android.Manifest.permission.INTERNET
 import android.app.Activity
-import android.os.Build
-import android.content.pm.PackageManager
 import android.os.AsyncTask
-import android.support.v4.app.ActivityCompat.requestPermissions
-import android.support.v4.app.ActivityCompat.shouldShowRequestPermissionRationale
-import android.support.v4.content.ContextCompat
 import org.w3c.dom.Node
 
 /**
@@ -34,6 +28,12 @@ class MainActivity :  AppCompatActivity(){
 
         loadApplication()
         chargementDashboard(this).execute()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.container, DashBoardFragment())
+                    .commit()
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -141,23 +141,6 @@ class chargementDashboard(val context: Activity): AsyncTask<Unit, Unit, String>(
 
     }
 
-
-    fun mayRequestInternet(context: Activity): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true
-        }
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(context, arrayOf(INTERNET), 0)
-
-            return true
-        }
-        if (shouldShowRequestPermissionRationale(context, INTERNET)) {
-            //TODO
-        } else {
-            requestPermissions(context, arrayOf(INTERNET), 0)
-        }
-        return false
-    }
 }
 
 

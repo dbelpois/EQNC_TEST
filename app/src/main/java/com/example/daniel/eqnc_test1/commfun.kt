@@ -3,11 +3,17 @@ package com.example.daniel.eqnc_test1
 /**
  * Created by daniel on 10/03/2018.
  */
+import android.Manifest
+import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
 import java.util.regex.Pattern
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -196,3 +202,21 @@ class LstMenuDashboard {
 
 }
 
+
+
+fun mayRequestInternet(context: Activity): Boolean {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        return true
+    }
+    if (ContextCompat.checkSelfPermission(context, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.INTERNET), 0)
+
+        return true
+    }
+    if (ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.INTERNET)) {
+        //TODO
+    } else {
+        ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.INTERNET), 0)
+    }
+    return false
+}
