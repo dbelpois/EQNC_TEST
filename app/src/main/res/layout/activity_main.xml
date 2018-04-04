@@ -40,11 +40,13 @@
                 android:layout_height="match_parent"
                 android:fillViewport="true">
 
-                <include
-                    android:id="@+id/inc_textappli"
-                    layout="@layout/content_main"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+
+                <fragment
+                    android:id="@+id/list"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:name="com.example.daniel.eqnc_test1.DashBoardFragment"
+                   />
 
             </android.support.v4.widget.NestedScrollView>
         </LinearLayout>

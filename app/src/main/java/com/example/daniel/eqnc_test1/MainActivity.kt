@@ -12,12 +12,13 @@ import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 import android.app.Activity
 import android.os.AsyncTask
+import com.example.daniel.eqnc_test1.dummy.DummyContent
 import org.w3c.dom.Node
 
 /**
  * Created by Daniel on 10/03/2018.
  */
-class MainActivity :  AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
     lateinit var sharedPreferencesHelper: SharedPreferencesHelper
     lateinit var sharedPreferenceEntry:  SharedPreferenceEntry
@@ -30,10 +31,9 @@ class MainActivity :  AppCompatActivity(){
         chargementDashboard(this).execute()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .add(R.id.container, DashBoardFragment())
+                    .add(R.id.container, MyDashBoardRecyclerViewAdapter())
                     .commit()
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -75,72 +75,11 @@ class MainActivity :  AppCompatActivity(){
         }
         startActivityForResult(Intent(gotoLogin),0)
     }
-
+    interface OnListFragmentInteractionListener {
+        // TODO: Update argument type and name
+        fun onListFragmentInteraction(item: DummyContent.DummyItem?)
+    }
 }
 
-
-/*******************************************
- *  Chargement du dashboard
- *
- *  TODO: Charger les icones sur internet ?
- */
-class chargementDashboard(val context: Activity): AsyncTask<Unit, Unit, String>() {
-    //lateinit var xmlMenu: Document
-    val l_xmlBuilder: DocumentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-    var xmlMenuDB: Document = l_xmlBuilder.newDocument() //l_xmlBuilder.parse ("https://www.equinumeric.fr/Applis/menu_dashboard.xml")
-
-    override fun doInBackground(vararg p0: Unit?): String? {
-
-        mayRequestInternet(context)
-        xmlMenuDB = l_xmlBuilder.parse("https://www.equinumeric.fr/Applis/menu_dashboard.xml")
-        return null
-    }
-
-    override fun onPostExecute(result: String?) {
-        super.onPostExecute(result)
-        xmlMenuDB.documentElement.normalize()
-        var DashBoardMenu: LstMenuDashboard = LstMenuDashboard()
-
-        var id: String = ""
-        var ordre: Int = 0
-        var Nom: String = ""
-        var imgMenu: String = ""
-        var description: String = ""
-
-        println("${xmlMenuDB.documentElement.nodeName}")
-
-        if (xmlMenuDB.documentElement.hasChildNodes()) {
-            var menuDashboard = xmlMenuDB.getElementsByTagName("MenuDashboard")
-
-            for (i in 0..menuDashboard.length - 1) {
-                val elem = menuDashboard.item(i)
-                if (elem.hasChildNodes()) {
-                    for (j in 0..elem.childNodes.length - 1) {
-                        if (elem.childNodes.item(j).nodeType == Node.ELEMENT_NODE) {
-                            when (elem.childNodes.item(j).nodeName) {
-                                "ID" -> id = elem.childNodes.item(j).textContent
-                                "Ordre" -> ordre = elem.childNodes.item(j).textContent.toInt()
-                                "Name" -> Nom = elem.childNodes.item(j).textContent
-                                "ImgURI" -> imgMenu = elem.childNodes.item(j).textContent
-                                "Description" -> description = elem.childNodes.item(j).textContent
-                            }
-                        }
-                    }
-                    DashBoardMenu.add(id, ordre, Nom, imgMenu, description)
-                }
-            }
-        }
-        //Affichage
-        DashBoardMenu.ListMenus?.sortBy { it.ordre }
-        var nbItem =  DashBoardMenu.ListMenus?.count()
-        var i=0
-        while (nbItem!=null && i < nbItem) {
-
-        }
-
-
-    }
-
-}
 
 

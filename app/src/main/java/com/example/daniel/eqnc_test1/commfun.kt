@@ -11,10 +11,15 @@ import java.util.regex.Pattern
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Build
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import org.w3c.dom.Document
+import org.w3c.dom.Node
 import java.util.*
+import javax.xml.parsers.DocumentBuilder
+import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.collections.ArrayList
 
 /**
@@ -219,4 +224,69 @@ fun mayRequestInternet(context: Activity): Boolean {
         ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.INTERNET), 0)
     }
     return false
+}
+
+
+/*******************************************
+ *  Chargement du dashboard
+ *
+ *  TODO: Charger les icones sur internet ?
+ */
+class chargementDashboard(val context: Activity): AsyncTask<Unit, Unit, String>() {
+    //lateinit var xmlMenu: Document
+    val l_xmlBuilder: DocumentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+    var xmlMenuDB: Document = l_xmlBuilder.newDocument() //l_xmlBuilder.parse ("https://www.equinumeric.fr/Applis/menu_dashboard.xml")
+
+    override fun doInBackground(vararg p0: Unit?): String? {
+
+        mayRequestInternet(context)
+        xmlMenuDB = l_xmlBuilder.parse("https://www.equinumeric.fr/Applis/menu_dashboard.xml")
+        return null
+    }
+
+    override fun onPostExecute(result: String?) {
+        super.onPostExecute(result)
+        xmlMenuDB.documentElement.normalize()
+        var DashBoardMenu: LstMenuDashboard = LstMenuDashboard()
+
+        var id: String = ""
+        var ordre: Int = 0
+        var Nom: String = ""
+        var imgMenu: String = ""
+        var description: String = ""
+
+        println("${xmlMenuDB.documentElement.nodeName}")
+
+        if (xmlMenuDB.documentElement.hasChildNodes()) {
+            var menuDashboard = xmlMenuDB.getElementsByTagName("MenuDashboard")
+
+            for (i in 0..menuDashboard.length - 1) {
+                val elem = menuDashboard.item(i)
+                if (elem.hasChildNodes()) {
+                    for (j in 0..elem.childNodes.length - 1) {
+                        if (elem.childNodes.item(j).nodeType == Node.ELEMENT_NODE) {
+                            when (elem.childNodes.item(j).nodeName) {
+                                "ID" -> id = elem.childNodes.item(j).textContent
+                                "Ordre" -> ordre = elem.childNodes.item(j).textContent.toInt()
+                                "Name" -> Nom = elem.childNodes.item(j).textContent
+                                "ImgURI" -> imgMenu = elem.childNodes.item(j).textContent
+                                "Description" -> description = elem.childNodes.item(j).textContent
+                            }
+                        }
+                    }
+                    DashBoardMenu.add(id, ordre, Nom, imgMenu, description)
+                }
+            }
+        }
+        //Affichage
+        DashBoardMenu.ListMenus?.sortBy { it.ordre }
+        var nbItem =  DashBoardMenu.ListMenus?.count()
+        var i=0
+        while (nbItem!=null && i < nbItem) {
+
+        }
+
+
+    }
+
 }

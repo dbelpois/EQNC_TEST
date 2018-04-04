@@ -19,10 +19,7 @@ import com.example.daniel.eqnc_test1.dummy.DummyContent.DummyItem
  * [DashBoardFragment.OnListFragmentInteractionListener] interface.
  */
 class DashBoardFragment : Fragment() {
-
-    // TODO: Customize parameters
     private var columnCount = 1
-
     private var listener: OnListFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +30,7 @@ class DashBoardFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_dashboard_list, container, false)
 
         // Set the adapter
@@ -52,11 +48,13 @@ class DashBoardFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
         if (context is OnListFragmentInteractionListener) {
             listener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
         }
+
     }
 
     override fun onDetach() {
